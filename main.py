@@ -136,10 +136,14 @@ async def analizza_cronologia_comando(update: Update, context: ContextTypes.DEFA
     await messaggio_attesa.edit_text(testo_risposta, parse_mode='HTML')
 
 # Avvio applicazione
-async def main():
+# Sostituisci la parte finale del tuo main.py con questa:
+
+def main():
+    """Configura e avvia l'applicazione in modo sincrono lasciando la gestione del loop a python-telegram-bot."""
     # Avvia il server web fittizio in un thread separato così non blocca il bot
     threading.Thread(target=avvia_server_fittizio, daemon=True).start()
 
+    # Creiamo l'applicazione di Telegram
     app = Application.builder().token(TOKEN_TELEGRAM).build()
     
     app.add_handler(CommandHandler("start", comando_start))
@@ -147,7 +151,10 @@ async def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, traccia_messaggi))
     
     print("🤖 BOT ONLINE!")
-    await app.run_polling(allowed_updates=Update.ALL_TYPES)
+    
+    # run_polling() si occupa autonomamente di creare, gestire e chiudere il loop asincrono in sicurezza!
+    app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
+
