@@ -13,8 +13,8 @@ from google import genai
 from google.genai import types
 
 # ----------------- CONFIGURAZIONE CHIAVI -----------------
-TOKEN_TELEGRAM = "8900344501:AAG_zoxZIAFlCpzOhmwdfdPRuJqfdgmJzSk"
-API_KEY_GEMINI = "AIzaSyAHagwQcX2x7Y0i7vOKYcAWW3H1Id745uA"
+TOKEN_TELEGRAM = os.environ.get("TOKEN_TELEGRAM", "")
+API_KEY_GEMINI = os.environ.get("API_KEY_GEMINI", "")
 # ---------------------------------------------------------
 
 client = genai.Client(api_key=API_KEY_GEMINI)
