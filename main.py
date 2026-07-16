@@ -1,7 +1,6 @@
 # CELLA 3: BOT TELEGRAM (VERSIONE FREE H24 PER RENDER)
 
 import asyncio
-import nest_asyncio
 import json
 import os
 import threading
@@ -11,7 +10,6 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 from google import genai
 from google.genai import types
 
-nest_asyncio.apply()
 
 # ----------------- CONFIGURAZIONE -----------------
 TOKEN_TELEGRAM = "8900344501:AAG_zoxZIAFlCpzOhmwdfdPRuJqfdgmJzSk"
