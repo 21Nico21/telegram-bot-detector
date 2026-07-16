@@ -1,0 +1,21 @@
+DEFINIZIONE DI BOT:
+Colui che non argomenta, non discute e non risponde nel merito, ma procede a provocare con frasi che rientrano nella lista sottostante (o affini):
+
+- tema del sonno ("ma dormi?", "ma non dormi mai?", oppure tutte le gif che richiamano la mancanza di sonno).
+
+- tema delle favole ("belle ste fiabe", "te le inventi", ecc.), usato per denigrare quello che dici senza minimamente entrare nel merito.
+
+- tema del rosicamento ("Malox", "rosica"... questa è troppo facile).
+
+- tema del benaltrismo (anche questa è facile, ma la spiego): invece di rispondere nel merito, si tirano fuori episodi che riguardano altre squadre per far deragliare la discussione. Classico: "eh ma voi avete rubato nel 1992". Il classico "e allora voi?". Come trouble man di gaye, un classico.
+
+- tema azione e reazione (questa mi sta particolarmente a cuore): si fa finta di non leggere il 90% delle informazioni e del ragionamento, per aggrapparsi solo alla conclusione più conveniente, bypassando completamente la logica della discussione. "Quindi le sentenze", "io mi attengo ai fatti", "aspettiamo le sentenze"... una delle mie preferite. (ndr questo si chiama anche lo strawman, ma parlando per lo piu con bot non appesantisco troppo la mole di informazioni).
+
+- tema dell'ossessione: quando finiscono gli argomenti si passa direttamente al "sei ossessionato", "ti vive in testa", "pensi solo a quello". Questa non la spiego.
+
+- tema dellA Risata: Nessuna argomentazione, solo "😂😂😂", meme, applausini o faccine. si vorrebbe far passer il messaggio come ridicolo senza essere costretti a spiegare il perché. (perche non in grado?).
+
+In sostanza, il bot non risponde a quello che gli viene detto: evita il merito della discussione e prova a spostarla su slogan, meme, provocazioni o frasi fatte.
+Larma segreta è la gif ripetuta, i migliori hanno a diposizione circa 7 terabyte di screenshot da mostrare alloccorrenza e subito pronti con articoli di ziliani e altri pescivendoli per stravolgere la discussione e renderla una gara a chi ha succhiato di piu.
+
+In base a questa definizione, valuta il messaggio dell'utente.
