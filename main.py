@@ -1,4 +1,6 @@
-# CELLA 3: BOT TELEGRAM (VERSIONE FREE H24 PER RENDER)
+# ==============================================================================
+# MAIN.PY - BOT TELEGRAM (VERSIONE AUTONOMA INTEGRATA - SENZA FILE ESTERNI)
+# ==============================================================================
 
 import asyncio
 import json
@@ -10,20 +12,19 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 from google import genai
 from google.genai import types
 
-
-# ----------------- CONFIGURAZIONE -----------------
+# ----------------- CONFIGURAZIONE CHIAVI -----------------
 TOKEN_TELEGRAM = "8900344501:AAG_zoxZIAFlCpzOhmwdfdPRuJqfdgmJzSk"
 API_KEY_GEMINI = "AIzaSyAHagwQcX2x7Y0i7vOKYcAWW3H1Id745uA"
-# --------------------------------------------------
+# ---------------------------------------------------------
 
 client = genai.Client(api_key=API_KEY_GEMINI)
 
-# --- SERVER WEB FITTIZIO PER RENDER (TRUCCO GRATUITO) ---
+# --- SERVER WEB FITTIZIO PER RENDER ---
 def avvia_server_fittizio():
     """Avvia un server HTTP basilare per far credere a Render che sia un sito web."""
     class QuietHandler(SimpleHTTPRequestHandler):
         def log_message(self, format, *args):
-            pass # Evita di intasare i log di Render con richieste di controllo
+            pass # Evita di intasare i log di Render
         def do_GET(self):
             self.send_response(200)
             self.send_header("Content-type", "text/plain")
@@ -35,18 +36,29 @@ def avvia_server_fittizio():
     print(f"🌍 Server web fittizio attivo sulla porta {port}")
     server.serve_forever()
 
-# --- FUNZIONI DI ANALISI ---
-def carica_prompt_base(filepath="definizione_bot.txt"):
-    try:
-        with open(filepath, "r", encoding="utf-8") as f:
-            return f.read()
-    except FileNotFoundError:
-        return "Errore: File definizione_bot.txt non trovato."
+# --- PROMPT INTEGRATO DIRETTAMENTE NEL CODICE ---
+def carica_prompt_base():
+    """Restituisce la definizione del bot direttamente in memoria."""
+    return """
+DEFINIZIONE DI BOT:
+Colui che non argomenta, non discute e non risponde nel merito, ma procede a provocare con frasi che rientrano nella lista sottostante (o affini):
+
+- tema del sonno ("ma dormi?", "ma non dormi mai?", oppure tutte le gif che richiamano la mancanza di sonno).
+- tema delle favole ("belle ste fiabe", "te le inventi", ecc.), usato per denigrare quello che dici senza minimamente entrare nel merito.
+- tema del rosicamento ("Malox", "rosica"... questa è troppo facile).
+- tema del benaltrismo: invece di rispondere nel merito, si tirano fuori episodi che riguardano altre squadre per far deragliare la discussione. Classico: "eh ma voi avete rubato nel 1992". Il classico "e allora voi?".
+- tema azione e reazione: si fa finta di non leggere il 90% delle informazioni e del ragionamento, per aggrapparsi solo alla conclusione più conveniente, bypassando completamente la logica della discussione.
+- tema dell'ossessione: quando finiscono gli argomenti si passa direttamente al "sei ossessionato", "ti vive in testa", "pensi solo a quello".
+- tema dellA Risata: Nessuna argomentazione, solo "😂😂😂", meme, applausini o faccine per far passare il messaggio come ridicolo senza spiegare il perché.
+
+In sostanza, il bot non risponde a quello che gli viene detto: evita il merito della discussione e prova a spostarla su slogan, meme, provocazioni o frasi fatte.
+
+In base a questa definizione, valuta il messaggio dell'utente.
+"""
 
 def analizza_cronologia(lista_messaggi):
+    """Chiede a Gemini di identificare l'utente peggiore tra gli ultimi 10 messaggi."""
     prompt_base = carica_prompt_base()
-    if "Errore" in prompt_base:
-        return {"errore": prompt_base}
     
     cronologia_formattata = ""
     for i, msg in enumerate(lista_messaggi, 1):
@@ -80,6 +92,7 @@ Restituisci ESCLUSIVAMENTE un JSON valido con questa esatta struttura:
     except Exception as e:
         return {"errore": str(e)}
 
+# --- GESTIONE COMANDI TELEGRAM ---
 async def comando_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "Pronto ad analizzare. Digita /detector nel gruppo per emettere la sentenza!"
@@ -88,6 +101,7 @@ async def comando_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 cronologia_chat = {}
 
 async def traccia_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Salva in memoria gli ultimi 10 messaggi."""
     if not update.message or not update.message.text:
         return
     
@@ -107,6 +121,7 @@ async def traccia_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE):
         cronologia_chat[chat_id].pop(0)
 
 async def analizza_cronologia_comando(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Gestisce il comando /detector e restituisce solo la sentenza."""
     chat_id = update.message.chat_id
     
     if chat_id not in cronologia_chat or len(cronologia_chat[chat_id]) == 0:
@@ -122,11 +137,13 @@ async def analizza_cronologia_comando(update: Update, context: ContextTypes.DEFA
         await messaggio_attesa.edit_text("❌ Impossibile completare l'analisi.")
         return
 
+    # Estrazione dati
     utente_peggiore = dati["utente_peggiore"]
     bot_score = dati.get("bot_score", 0)
     categorie_list = dati.get("categorie", [])
     sintomi = ", ".join(categorie_list) if categorie_list else "Nessuno in particolare"
 
+    # Risposta diretta, mirata sul peggiore
     testo_risposta = (
         f"<b>{utente_peggiore}</b> è proprio un BOT! 🤖\n\n"
         f"▪️ <b>Punteggio:</b> {bot_score}/100\n"
@@ -135,11 +152,9 @@ async def analizza_cronologia_comando(update: Update, context: ContextTypes.DEFA
 
     await messaggio_attesa.edit_text(testo_risposta, parse_mode='HTML')
 
-# Avvio applicazione
-# Sostituisci la parte finale del tuo main.py con questa:
-
+# --- AVVIO DELL'APPLICAZIONE ---
 def main():
-    """Configura e avvia l'applicazione in modo sincrono lasciando la gestione del loop a python-telegram-bot."""
+    """Configura e avvia l'applicazione in modo sincrono."""
     # Avvia il server web fittizio in un thread separato così non blocca il bot
     threading.Thread(target=avvia_server_fittizio, daemon=True).start()
 
@@ -152,7 +167,7 @@ def main():
     
     print("🤖 BOT ONLINE!")
     
-    # run_polling() si occupa autonomamente di creare, gestire e chiudere il loop asincrono in sicurezza!
+    # run_polling() si occupa autonomamente di gestire il loop
     app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
