@@ -121,7 +121,7 @@ async def traccia_messaggi(update: Update, context: ContextTypes.DEFAULT_TYPE):
         cronologia_chat[chat_id].pop(0)
 
 async def analizza_cronologia_comando(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Gestisce il comando /detector e restituisce solo la sentenza."""
+    """Gestisce il comando /detector e restituisce la sentenza (o l'errore reale se fallisce)."""
     chat_id = update.message.chat_id
     
     if chat_id not in cronologia_chat or len(cronologia_chat[chat_id]) == 0:
@@ -133,8 +133,13 @@ async def analizza_cronologia_comando(update: Update, context: ContextTypes.DEFA
     lista_da_analizzare = cronologia_chat[chat_id]
     dati = analizza_cronologia(lista_da_analizzare)
 
-    if "errore" in dati or "utente_peggiore" not in dati:
-        await messaggio_attesa.edit_text("❌ Impossibile completare l'analisi.")
+    # Se c'è un errore specifico, lo stampiamo per fare debug!
+    if "errore" in dati:
+        await messaggio_attesa.edit_text(f"❌ Errore riscontrato:\n<code>{dati['errore']}</code>", parse_mode='HTML')
+        return
+
+    if "utente_peggiore" not in dati:
+        await messaggio_attesa.edit_text("❌ Struttura dati non conforme ricevuta dall'AI.")
         return
 
     # Estrazione dati
