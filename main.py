@@ -81,7 +81,7 @@ Restituisci ESCLUSIVAMENTE un JSON valido con questa esatta struttura:
 """
     try:
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-2.0-flash",
             contents=prompt_finale,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
